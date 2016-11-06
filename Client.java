@@ -22,12 +22,7 @@ public class Client implements Buyer, Seller
      */
     public boolean createAuction()
     {
-        /*
-         * some code to create auction on server
-         */
-        
-        // return AuctionSite.existsOnServer(auctionJustCreated); //return true if creation successful
-        return false;
+        return serverSite.addAuction("criteria");
     }
     
     public boolean cancelAuction(int idToCancel)
@@ -55,5 +50,16 @@ public class Client implements Buyer, Seller
         return false;
     }
     
+    public boolean placeBid(int auctionID, long bidPrice)
+    {
+        
+        buyingAuctions.add(serverSite.getAuction(auctionID));  // if the bid is successful, add this auction to the collection of auctions this user is bidding on
+        return true;
+    }
     
+    public Map<Integer, Auction> retrieveListings()
+    {
+        
+        return serverSite.getAuctionList("criteria");
+    }
 }

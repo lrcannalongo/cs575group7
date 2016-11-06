@@ -20,13 +20,15 @@ public abstract class Auction
     {
     }
     
+    
+    
     public long remainingSeconds()
     {
         return System.currentTimeMillis() - (startTime + duration);
     }
     
-    public void notifyAuctionWatcher()
+    public int generateID()
     {
-        // take some actions to notify observes of a change
+        return 5;
     }
 }

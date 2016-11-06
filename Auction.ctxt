@@ -4,5 +4,5 @@ comment0.target=Auction()
 comment1.params=
 comment1.target=long\ remainingSeconds()
 comment2.params=
-comment2.target=void\ notifyAuctionWatcher()
+comment2.target=int\ generateID()
 numComments=3
