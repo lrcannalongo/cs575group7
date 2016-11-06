@@ -1,3 +1,4 @@
+import java.util.*;
 
 /**
  * Write a description of class AuctionSite here.
@@ -8,7 +9,7 @@
 public class AuctionSite
 {
     Collection<Client> users;
-    Collections<Auction> activeListings;
+    Collection<Auction> activeListings;
 
     /**
      * Constructor for objects of class AuctionSite
