@@ -1,0 +1,16 @@
+#BlueJ class context
+comment0.params=
+comment0.target=Client()
+comment0.text=\r\n\ Constructor\ for\ objects\ of\ class\ User\r\n
+comment1.params=
+comment1.target=boolean\ createAuction()
+comment1.text=\r\n
+comment2.params=idToCancel
+comment2.target=boolean\ cancelAuction(int)
+comment3.params=idToModify\ componentToMod
+comment3.target=void\ modifyAuction(int,\ int)
+comment4.params=
+comment4.target=boolean\ sendMessage()
+comment5.params=auctionID
+comment5.target=boolean\ cancelBid(int)
+numComments=6

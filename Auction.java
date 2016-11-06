@@ -12,6 +12,7 @@ public abstract class Auction
     String description;
     int startTime;
     int duration;
+    int auctionUID; 
     
     
     
@@ -19,12 +20,13 @@ public abstract class Auction
     {
     }
     
-    public int remainingSeconds()
+    public long remainingSeconds()
     {
-        return currentTime - (startTime + duration);
+        return System.currentTimeMillis() - (startTime + duration);
     }
     
     public void notifyAuctionWatcher()
     {
+        // take some actions to notify observes of a change
     }
 }

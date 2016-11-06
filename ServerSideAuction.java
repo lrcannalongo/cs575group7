@@ -1,4 +1,4 @@
-
+import java.util.*;
 /**
  * Write a description of class ServerSideAuction here.
  * 
@@ -7,7 +7,8 @@
  */
 public class ServerSideAuction extends ConcreteAuction
 {
-    Map<User, Bids> bidHistory;
+    Map<Integer, Bid> bidHistory; //userid and bid
+    int highBidder; //userid of high bidder
 
     /**
      */
