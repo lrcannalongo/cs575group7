@@ -1,12 +1,14 @@
+import java.util.*;
 
 /**
  */
-public interface Client
+public class Client implements Buyer, Seller
 {   
-    Collection sellingAuctions;
-    Collection buyingAuctions;
-    int userid;
-    Collection<Messages> mailbox;
+    Collection<Auction> sellingAuctions;
+    Collection<Auction> buyingAuctions;
+    protected int userid;
+    // Collection<Messages> mailbox = null; //NYI
+    private AuctionSite serverSite;
     
     /**
      * Constructor for objects of class User
@@ -20,30 +22,44 @@ public interface Client
      */
     public boolean createAuction()
     {
-        /*
-         * some code to create auction on server
-         */
-        
-        return AuctionSite.existsOnServer(auctionJustCreated);
+        return serverSite.addAuction("criteria");
     }
     
-    public boolean cancelAuction(Auction aucToCancel)
+    public boolean cancelAuction(int idToCancel)
     {
-        auctions.remove(aucToCancel);
+        sellingAuctions.remove(idToCancel);
+        return false;
     }
     
-    public void modifyAuction(Auction aucToModify, int componentToMod)
+    public void modifyAuction(int idToModify, int componentToMod)
     {
        if (componentToMod == 0)
        {
-           aucToModify.modifyHeader();
+           //aucToModify.modifyHeader(); // NYI
        }
     }
     
     
     public boolean sendMessage()
     {
+        return true;
     }
     
+    public boolean cancelBid(int auctionID)
+    {
+        return false;
+    }
     
+    public boolean placeBid(int auctionID, long bidPrice)
+    {
+        
+        buyingAuctions.add(serverSite.getAuction(auctionID));  // if the bid is successful, add this auction to the collection of auctions this user is bidding on
+        return true;
+    }
+    
+    public Map<Integer, Auction> retrieveListings()
+    {
+        
+        return serverSite.getAuctionList("criteria");
+    }
 }

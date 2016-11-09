@@ -1,3 +1,4 @@
+import java.util.*;
 
 /**
  * Write a description of class AuctionSite here.
@@ -7,8 +8,8 @@
  */
 public class AuctionSite
 {
-    Collection<Client> users;
-    Collections<Auction> activeListings;
+    List<Client> users;
+    Map<Integer, Auction> activeListings;
 
     /**
      * Constructor for objects of class AuctionSite
@@ -26,5 +27,50 @@ public class AuctionSite
     public Client newUser()
     {
         return new Client();
+    }
+    
+    Auction getAuction(int auctionID)
+    {
+        return activeListings.get(auctionID);
+    }
+    
+    Map<Integer, Auction> getAuctionList(String criteria)
+    {
+        return new HashMap<Integer, Auction>();
+    }
+    
+    boolean addAuction(String criteria)
+    {
+        Auction a = new ServerSideAuction();
+        int id = a.generateID();
+        
+        activeListings.put(id, a);
+        
+        if (activeListings.containsKey(id))
+        {
+            return true;
+        }
+        else
+        {
+            return false;
+        }
+    }
+    
+    boolean removeAuction(int auctionID)
+    {
+        try
+        {
+            activeListings.remove(auctionID); //incorrect implementation
+        }
+        finally
+        {
+            return activeListings.containsKey(auctionID);
+        }
+    }
+    
+    boolean placeBid(int userid, int auctionID, long bidPrice)
+    {
+        ServerSideAuction a = (ServerSideAuction) activeListings.get(auctionID);
+        return a.placeBid(userid, bidPrice);
     }
 }
