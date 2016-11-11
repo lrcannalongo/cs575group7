@@ -8,7 +8,7 @@ import java.util.*;
  */
 public class AuctionSite
 {
-    List<Client> users;
+    List<User> users;
     Map<Integer, Auction> activeListings;
 
     /**
@@ -24,9 +24,9 @@ public class AuctionSite
      * @param  y   a sample parameter for a method
      * @return     the sum of x and y 
      */
-    public Client newUser()
+    public User newUser()
     {
-        return new Client();
+        return new User();
     }
     
     Auction getAuction(int auctionID)
