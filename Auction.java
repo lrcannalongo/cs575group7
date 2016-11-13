@@ -1,3 +1,6 @@
+import java.sql.Timestamp;
+import java.util.Date;
+
 
 /**
  * Abstract class Auction - write a description of the class here

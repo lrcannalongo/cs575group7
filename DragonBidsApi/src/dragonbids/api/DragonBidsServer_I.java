@@ -1,4 +1,4 @@
-package dragonbids.api;
+package DragonBidsApi.src.dragonbids.api;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;

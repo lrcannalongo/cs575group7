@@ -1,12 +1,15 @@
-package dragonbids.server;
+package DragonBidsServer.src.dragonbids.server;
 
-import dragonbids.api.*;
+import DragonBidsStructures.listings.*;
+import DragonBidsStructures.listings.ListingHandlers.*;
+import DragonBidsApi.src.dragonbids.api.*;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.*;
 
 public class DragonBidsServer implements DragonBidsServer_I {
 	
@@ -17,7 +20,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	public int createAuction() {
 		// TODO Auto-generated method stub
 		//Would invoke auction factory to create an auction, and would return the auctionId
-		System.out.println("DEBUG: Just Received Invocation of Method From Client!");
+		System.out.println("DEBUG: Just Received Invocation of Method From Client: createAuction!");
 		return 0;
 	}
 	

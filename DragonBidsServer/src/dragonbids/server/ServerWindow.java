@@ -1,4 +1,4 @@
-package dragonbids.server;
+package DragonBidsServer.src.dragonbids.server;
 
 import java.awt.Color;
 import java.awt.EventQueue;
@@ -16,7 +16,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import javax.swing.JTextArea;
 
-import dragonbids.api.*;
+import DragonBidsApi.src.dragonbids.api.*;
 
 public class ServerWindow extends JFrame {
 
