@@ -1,4 +1,4 @@
-package dragonbids.server;
+package DragonBidsServer.src.dragonbids.server;
 
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
