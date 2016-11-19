@@ -16,39 +16,6 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	private String dragonBidsServer = "DragonBids";
 	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
 
-	@Override
-	public int createListing() {
-		// TODO Auto-generated method stub
-		//Would invoke auction factory to create an auction, and would return the auctionId
-		System.out.println("DEBUG: Just Received Invocation of Method From Client!");
-		return 0;
-	}
-	
-	@Override
-	public boolean createUser(String username, boolean doesUserAlredyExist) throws RemoteException {
-		// TODO Auto-generated method stub
-		doesUserAlredyExist = false;
-		Iterator<User> it = activeUsers.iterator();
-		while(it.hasNext())
-		{
-			if (it.next().getUsername().equals(username.toString())) // We found the user already, so Let Client Login
-			{
-				System.out.println("User " + username + ", has connected to server ...");
-				doesUserAlredyExist = true;
-				return false;
-			}
-		}
-
-		try {
-			activeUsers.add(new User(username)); // Create new user, and add to our vector
-			return true;
-		}
-		catch(Exception e)
-		{
-			return false;
-		}
-	}
-	
 	public boolean bindServerToRegister(int port)
 	{
 		boolean bindSuccess = false;
@@ -86,6 +53,65 @@ public class DragonBidsServer implements DragonBidsServer_I {
 			e.printStackTrace();
 		}
 		return unbindSuccess;
+	}
+	
+	@Override
+	public boolean createUser(String username) throws RemoteException {
+		// TODO Auto-generated method stub
+		Iterator<User> it = activeUsers.iterator();
+		while(it.hasNext())
+		{
+			if (it.next().getUsername().equals(username.toString())) // We found the user already, so Let Client Login
+			{
+				System.out.println("User " + username + ", has connected to server ...");
+				return false;
+			}
+		}
+
+		try {
+			activeUsers.add(new User(username)); // Create new user, and add to our vector
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
+	}
+
+	@Override
+	public boolean createListing(ListingSkeleton arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public Vector<ListingSkeleton> getListings() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Vector<String> getUsers() throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean modifyListing(ListingSkeleton arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean placeBid(ListingSkeleton arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public boolean remoteListing(int arg0) throws RemoteException {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

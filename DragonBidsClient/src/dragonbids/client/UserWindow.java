@@ -35,7 +35,7 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import javax.swing.JSplitPane;
+import dragonbids.api.*;
 
 public class UserWindow extends JFrame {
 
@@ -61,7 +61,6 @@ public class UserWindow extends JFrame {
 	private JTextField buySellerUname;
 	private JTextField buyBuyerUname;
 	private JTextArea buyDescription;
-	
 	private boolean isLoggedIn = false;
 
 	/**
@@ -164,8 +163,7 @@ public class UserWindow extends JFrame {
 					System.exit(NORMAL);
 				}
 				try{
-					boolean doesUserExist = false;
-					if(stub.createUser((String)usernameInput.getText(), doesUserExist))
+					if(stub.createUser((String)usernameInput.getText()))
 					{
 						System.out.println("Created User " + usernameInput.getText() + "...");
 						Communication.getCommunication((String)usernameInput.getText());
@@ -478,7 +476,8 @@ public class UserWindow extends JFrame {
 				// The Create Listing Class would get the remote object stub (stub)
 					// The Listing Class would ultimately invoke the server like this:
 				try{
-					stub.createAuction();
+					ListingSkeleton listing = new ListingSkeleton();
+					stub.createListing(listing);
 				}
 				catch (RemoteException e)
 				{
