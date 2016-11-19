@@ -1,4 +1,4 @@
-package dragonbids.client;
+package DragonBidsClient.src.dragonbids.client;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -10,6 +10,9 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.JTabbedPane;
 import javax.swing.JButton;
 import javax.swing.event.ChangeListener;
+
+import DragonBidsApi.src.dragonbids.api.*;
+
 import javax.swing.event.ChangeEvent;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
@@ -23,7 +26,7 @@ import java.awt.Toolkit;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
-import dragonbids.api.*;
+//import dragonbids.api.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
