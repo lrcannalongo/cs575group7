@@ -1,27 +1,52 @@
-package DragonBidsServer.src.dragonbids.server;
+package dragonbids.server;
 
-import DragonBidsStructures.listings.*;
-import DragonBidsStructures.listings.ListingHandlers.*;
-import DragonBidsApi.src.dragonbids.api.*;
+import dragonbids.api.*;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.AccessException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.*;
+import java.util.Iterator;
+import java.util.Vector;
 
 public class DragonBidsServer implements DragonBidsServer_I {
 	
 	private Registry registry;
 	private String dragonBidsServer = "DragonBids";
+	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
 
 	@Override
-	public int createAuction() {
+	public int createListing() {
 		// TODO Auto-generated method stub
 		//Would invoke auction factory to create an auction, and would return the auctionId
-		System.out.println("DEBUG: Just Received Invocation of Method From Client: createAuction!");
+		System.out.println("DEBUG: Just Received Invocation of Method From Client!");
 		return 0;
+	}
+	
+	@Override
+	public boolean createUser(String username, boolean doesUserAlredyExist) throws RemoteException {
+		// TODO Auto-generated method stub
+		doesUserAlredyExist = false;
+		Iterator<User> it = activeUsers.iterator();
+		while(it.hasNext())
+		{
+			if (it.next().getUsername().equals(username.toString())) // We found the user already, so Let Client Login
+			{
+				System.out.println("User " + username + ", has connected to server ...");
+				doesUserAlredyExist = true;
+				return false;
+			}
+		}
+
+		try {
+			activeUsers.add(new User(username)); // Create new user, and add to our vector
+			return true;
+		}
+		catch(Exception e)
+		{
+			return false;
+		}
 	}
 	
 	public boolean bindServerToRegister(int port)
@@ -62,4 +87,5 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		}
 		return unbindSuccess;
 	}
+
 }
