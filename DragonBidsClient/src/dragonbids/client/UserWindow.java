@@ -9,15 +9,17 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Color;
 import java.awt.Font;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.format.*;
+import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
 import java.util.Vector;
 import java.awt.Toolkit;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-
 import dragonbids.api.*;
 import sun.security.krb5.internal.crypto.Des;
 
@@ -511,7 +513,8 @@ public class UserWindow extends JFrame {
 					}
 					LocalDateTime completeDateTime;
 					try {
-						completeDateTime = LocalDateTime.parse(Duration);
+						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						completeDateTime = LocalDateTime.parse(Duration,dateFormat);
 					}
 					catch (Exception e)
 					{
