@@ -87,7 +87,8 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	@Override
 	public Vector<ListingSkeleton> getListings() throws RemoteException {
 		// TODO Auto-generated method stub
-		return null;
+		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
+		return listingSkeletonVector;
 	}
 
 	@Override

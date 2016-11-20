@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
 import java.awt.Toolkit;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -122,6 +123,16 @@ public class UserWindow extends JFrame {
 			    	break;
 			    	
 			    case 3: //Browse Tab
+			    	try
+			    	{
+			    		Vector<ListingSkeleton> listingVector = new Vector<ListingSkeleton>();
+			    		listingVector = stub.getListings();
+			    		System.out.println(listingVector.size());
+			    	}
+			    	catch (Exception getListingException)
+			    	{
+			    		// Error
+			    	}
 			    	break;
 			    	
 			    case 4: //Messages Tab
