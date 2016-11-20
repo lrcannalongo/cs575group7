@@ -4,6 +4,8 @@ import dragonbids.api.*;
 import dragonbids.structures.listings.Listing;
 import dragonbids.structures.listings.ListingFactory;
 
+import dragonbids.structures.listings.*;
+import dragonbids.structures.listings.ListingHandlers.*;
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.AccessException;
@@ -13,15 +15,15 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Vector;
+import java.util.HashMap;
 
 public class DragonBidsServer implements DragonBidsServer_I {
 	
 	private Registry registry;
 	private String dragonBidsServer = "DragonBids";
 	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
-    private Vector<Listing> activeListings= new Vector<>();
-	private int lastAuctionUID=0;
-
+	private HashMap<Integer, Listing> activeListings = new HashMap<Integer, Listing>(); //collection of active listings held on server
+    private int lastAuctionUID=0;
 	public boolean bindServerToRegister(int port)
 	{
 		boolean bindSuccess = false;
@@ -92,7 +94,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		lastAuctionUID+=1;
 		//Todo: Add duration to listing
 		Listing newAuction=factory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
-		activeListings.add(newAuction);
+		activeListings.put(lastAuctionUID,newAuction);
 		return true;
 		//Todo : When should this return false ?
 	}
@@ -113,6 +115,17 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	@Override
 	public boolean modifyListing(ListingSkeleton arg0) throws RemoteException {
 		// TODO Auto-generated method stub
+		// TODO finish modification of existing listing object
+		Listing listingToMod = getListing(arg0);
+		
+		if (listingToMod instanceof Auction)
+		{
+			AuctionHandler hndl = new AuctionHandler((Auction) listingToMod);
+			// rest of method NYI
+			
+		}
+		
+		
 		return false;
 	}
 
@@ -126,6 +139,15 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	public boolean remoteListing(int arg0) throws RemoteException {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	private Listing getListing(ListingSkeleton skeleton){
+		
+		
+		Listing listing = activeListings.get(skeleton.listingId);
+		
+		return listing;
+		
 	}
 
 }
