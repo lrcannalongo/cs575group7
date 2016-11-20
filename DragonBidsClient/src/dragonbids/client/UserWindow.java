@@ -62,7 +62,7 @@ public class UserWindow extends JFrame {
 	private JTextField buyBuyerUname;
 	private JTextArea buyDescription;
 	private boolean isLoggedIn = false;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -109,8 +109,24 @@ public class UserWindow extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 			    JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
-			    int index = sourceTabbedPane.getSelectedIndex();
-			    System.out.println("DEBUG: Active Tab: " + sourceTabbedPane.getTitleAt(index));
+			    int tabIndex = sourceTabbedPane.getSelectedIndex();
+			    
+			    switch(tabIndex) { //Client Window Tab Activation
+			    case 0 : //Account Tab
+			    	break;
+			    	
+			    case 1: //Listing Detail Tab
+			    	break;
+			    	
+			    case 2: //Sell Tab
+			    	break;
+			    	
+			    case 3: //Browse Tab
+			    	break;
+			    	
+			    case 4: //Messages Tab
+			    	break;
+			    }
 			}
 		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
