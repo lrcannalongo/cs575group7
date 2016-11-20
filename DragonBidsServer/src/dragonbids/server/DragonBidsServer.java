@@ -1,6 +1,9 @@
 package dragonbids.server;
 
 import dragonbids.api.*;
+import dragonbids.structures.listings.Listing;
+import dragonbids.structures.listings.ListingFactory;
+
 import java.rmi.registry.Registry;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.AccessException;
@@ -8,6 +11,7 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Vector;
 
 public class DragonBidsServer implements DragonBidsServer_I {
@@ -15,6 +19,8 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	private Registry registry;
 	private String dragonBidsServer = "DragonBids";
 	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
+    private Vector<Listing> activeListings= new Vector<>();
+	private int lastAuctionUID=0;
 
 	public boolean bindServerToRegister(int port)
 	{
@@ -80,8 +86,15 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean createListing(ListingSkeleton arg0) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+
+
+		ListingFactory factory=new ListingFactory();
+		lastAuctionUID+=1;
+		//Todo: Add duration to listing
+		Listing newAuction=factory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
+		activeListings.add(newAuction);
+		return true;
+		//Todo : When should this return false ?
 	}
 
 	@Override
