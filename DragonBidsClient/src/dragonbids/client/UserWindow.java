@@ -21,7 +21,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import dragonbids.api.*;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
