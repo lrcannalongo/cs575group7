@@ -512,4 +512,21 @@ public class UserWindow extends JFrame {
 		}
 		
 	}
+	
+	private void modifyListing()
+	{
+		if (!waitingForServer)
+		{
+			try
+			{
+				ListingSkeleton modListing = new ListingSkeleton(); //will require updated listing skeleton constructor
+				stub.modifyListing(modListing);
+			}
+			catch (RemoteException e)
+			{
+				// failed to invoke on server
+			}
+			
+		}
+	}
 }

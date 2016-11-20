@@ -103,6 +103,13 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean modifyListing(ListingSkeleton arg0) throws RemoteException {
+		//THOUGHTS: create singletons for a Handler of each of each ListingType
+		//			handler has one method: modify(Listing, ListingSkeleton) that
+		//			updates the Listing to the spec described by ListingSkeleton
+		//          >>rolls bid placement into the modify() method of Handler
+		//          >>allows listing to be responsible for defining how to place bid, etc
+		//          ** IS A STRATEGY PATTERN **
+		
 		// TODO Auto-generated method stub
 		// TODO finish modification of existing listing object
 		Listing listingToMod = getListing(arg0);
@@ -110,6 +117,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (listingToMod instanceof Auction)
 		{
 			AuctionHandler hndl = new AuctionHandler((Auction) listingToMod);
+			hndl.modify(arg0);
 			// rest of method NYI
 			
 		}
@@ -124,9 +132,13 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		return false;
 	}
 
+	
 	@Override
-	public boolean remoteListing(int arg0) throws RemoteException {
+	public boolean removeListing(int arg0) throws RemoteException {
 		// TODO Auto-generated method stub
+		// TODO implement observer notification so that bidders know auction is canceled
+		Listing lst = activeListings.remove(arg0);
+		// lst.notifyObservers(new ListingRemovedNotification());
 		return false;
 	}
 	

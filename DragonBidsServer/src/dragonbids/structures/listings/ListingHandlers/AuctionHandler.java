@@ -1,5 +1,6 @@
 package dragonbids.structures.listings.ListingHandlers;
 import dragonbids.structures.listings.*;
+import dragonbids.api.*;
 
 
 
@@ -8,14 +9,23 @@ import dragonbids.structures.listings.*;
 public class AuctionHandler implements ListingHandler
 
 {
-    Auction auction;
-    /**
-     * Constructor for objects of class AuctionHandler
-     */
+    private Auction auction;
+    
     public AuctionHandler(Auction auction)
     {
         this.auction = auction;
     }
+    
+    public boolean modify(ListingSkeleton skele)
+    {
+    	
+    	//TODO modify duration
+    	modifyTitle(skele.auctionTile);
+    	modifyDesc(skele.auctionDescription);
+    	
+    	return true;
+    }
+    
     
     public boolean placeBid(String userid, long newBid)
     {   
