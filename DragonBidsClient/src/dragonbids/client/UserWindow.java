@@ -19,6 +19,7 @@ import java.awt.Color;
 import java.awt.Font;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Vector;
 import java.awt.Toolkit;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -35,7 +36,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import dragonbids.api.*;
 
 public class UserWindow extends JFrame {
 
@@ -62,7 +62,7 @@ public class UserWindow extends JFrame {
 	private JTextField buyBuyerUname;
 	private JTextArea buyDescription;
 	private boolean isLoggedIn = false;
-
+	
 	/**
 	 * Launch the application.
 	 */
@@ -109,8 +109,34 @@ public class UserWindow extends JFrame {
 		tabbedPane.addChangeListener(new ChangeListener() {
 			public void stateChanged(ChangeEvent e) {
 			    JTabbedPane sourceTabbedPane = (JTabbedPane) e.getSource();
-			    int index = sourceTabbedPane.getSelectedIndex();
-			    System.out.println("DEBUG: Active Tab: " + sourceTabbedPane.getTitleAt(index));
+			    int tabIndex = sourceTabbedPane.getSelectedIndex();
+			    
+			    switch(tabIndex) { //Client Window Tab Activation
+			    case 0 : //Account Tab
+			    	break;
+			    	
+			    case 1: //Listing Detail Tab
+			    	break;
+			    	
+			    case 2: //Sell Tab
+			    	break;
+			    	
+			    case 3: //Browse Tab
+			    	try
+			    	{
+			    		Vector<ListingSkeleton> listingVector = new Vector<ListingSkeleton>();
+			    		listingVector = stub.getListings();
+			    		System.out.println(listingVector.size());
+			    	}
+			    	catch (Exception getListingException)
+			    	{
+			    		// Error
+			    	}
+			    	break;
+			    	
+			    case 4: //Messages Tab
+			    	break;
+			    }
 			}
 		});
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
