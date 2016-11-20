@@ -526,9 +526,10 @@ public class UserWindow extends JFrame {
 					listing.auctionTile=Title;
 					listing.sellerUsername= usernameInput.getText();
 					listing.auctionCompletionDateTime= completeDateTime;
-					stub.createListing(listing);
-					JOptionPane.showMessageDialog(null,"Done!");
-
+					if(stub.createListing(listing)) {
+						//TODO: Redirect to another tab
+						JOptionPane.showMessageDialog(null, "Done!");
+					}
 
 				}
 				catch (RemoteException e)
