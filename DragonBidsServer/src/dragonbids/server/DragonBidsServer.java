@@ -1,6 +1,9 @@
 package dragonbids.server;
 
 import dragonbids.api.*;
+import dragonbids.structures.listings.Listing;
+import dragonbids.structures.listings.ListingFactory;
+
 import dragonbids.structures.listings.*;
 import dragonbids.structures.listings.ListingHandlers.*;
 import java.rmi.registry.Registry;
@@ -19,7 +22,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	private String dragonBidsServer = "DragonBids";
 	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
 	private HashMap<Integer, Listing> activeListings = new HashMap<Integer, Listing>(); //collection of active listings held on server
-
+    private int lastAuctionUID=0;
 	public boolean bindServerToRegister(int port)
 	{
 		boolean bindSuccess = false;
@@ -84,8 +87,15 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean createListing(ListingSkeleton arg0) throws RemoteException {
-		// TODO Auto-generated method stub
-		return false;
+
+
+		ListingFactory factory=new ListingFactory();
+		lastAuctionUID+=1;
+		//Todo: Add duration to listing
+		Listing newAuction=factory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
+		activeListings.put(lastAuctionUID,newAuction);
+		return true;
+		//Todo : When should this return false ?
 	}
 
 	@Override
@@ -103,6 +113,13 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean modifyListing(ListingSkeleton arg0) throws RemoteException {
+		//THOUGHTS: create singletons for a Handler of each of each ListingType
+		//			handler has one method: modify(Listing, ListingSkeleton) that
+		//			updates the Listing to the spec described by ListingSkeleton
+		//          >>rolls bid placement into the modify() method of Handler
+		//          >>allows listing to be responsible for defining how to place bid, etc
+		//          ** IS A STRATEGY PATTERN **
+		
 		// TODO Auto-generated method stub
 		// TODO finish modification of existing listing object
 		Listing listingToMod = getListing(arg0);
@@ -110,6 +127,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (listingToMod instanceof Auction)
 		{
 			AuctionHandler hndl = new AuctionHandler((Auction) listingToMod);
+			hndl.modify(arg0);
 			// rest of method NYI
 			
 		}
@@ -124,9 +142,12 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		return false;
 	}
 
-	@Override
-	public boolean remoteListing(int arg0) throws RemoteException {
+	
+	public boolean removeListing(int listingId) throws RemoteException {
 		// TODO Auto-generated method stub
+		// TODO implement observer notification so that bidders know auction is canceled
+		Listing lst = activeListings.remove(listingId);
+		// lst.notifyObservers(new ListingRemovedNotification());
 		return false;
 	}
 	
