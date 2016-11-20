@@ -36,7 +36,6 @@ import javax.swing.ListSelectionModel;
 import javax.swing.JSeparator;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
-import dragonbids.api.*;
 
 public class UserWindow extends JFrame {
 
