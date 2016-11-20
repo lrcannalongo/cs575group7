@@ -104,7 +104,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
 		
 		for (Listing listing : activeListings.values()) {
-			
+			listing.
 		}
 		
 		return listingSkeletonVector;
