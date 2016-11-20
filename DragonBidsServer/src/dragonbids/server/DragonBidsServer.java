@@ -143,11 +143,10 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	}
 
 	
-	@Override
-	public boolean removeListing(int arg0) throws RemoteException {
+	public boolean removeListing(int listingId) throws RemoteException {
 		// TODO Auto-generated method stub
 		// TODO implement observer notification so that bidders know auction is canceled
-		Listing lst = activeListings.remove(arg0);
+		Listing lst = activeListings.remove(listingId);
 		// lst.notifyObservers(new ListingRemovedNotification());
 		return false;
 	}
