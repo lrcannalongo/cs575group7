@@ -21,7 +21,6 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import dragonbids.api.*;
-import sun.security.krb5.internal.crypto.Des;
 
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
@@ -360,6 +359,17 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.setForeground(Color.RED);
 		btnRemoveListing.setBounds(577, 31, 117, 29);
 		pListingDetails.add(btnRemoveListing);
+		
+		JButton btnModifyItem = new JButton("Modify Item");
+		btnModifyItem.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				
+			}
+		});
+		btnModifyItem.setForeground(Color.RED);
+		btnModifyItem.setBounds(577, 6, 117, 29);
+		pListingDetails.add(btnModifyItem);
 		
 		JPanel pCreateAuction = new JPanel();
 		pCreateAuction.setFont(new Font("Helvetica Neue", Font.PLAIN, 13));
