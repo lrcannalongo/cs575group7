@@ -518,7 +518,7 @@ public class UserWindow extends JFrame {
 					}
 					catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null,"Invalid DateTime Format");
+						JOptionPane.showMessageDialog(null,"Invalid DateTime Format yyyy/MM/dd HH:mm:ss");
 						return;
 					}
 					ListingSkeleton listing= new ListingSkeleton();
@@ -527,6 +527,8 @@ public class UserWindow extends JFrame {
 					listing.sellerUsername= usernameInput.getText();
 					listing.auctionCompletionDateTime= completeDateTime;
 					stub.createListing(listing);
+					JOptionPane.showMessageDialog(null,"Done!");
+
 
 				}
 				catch (RemoteException e)
