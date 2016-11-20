@@ -383,7 +383,7 @@ public class UserWindow extends JFrame {
 				createAuction();
 			}
 		});
-		btnListItem.setBounds(596, 269, 117, 29);
+		btnListItem.setBounds(495, 269, 117, 29);
 		pCreateAuction.add(btnListItem);
 		
 		JLabel lblNewLabel_1 = new JLabel("Title:");

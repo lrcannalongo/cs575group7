@@ -1,8 +1,14 @@
 package dragonbids.api;
 
+import java.rmi.RemoteException;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 
-public class ListingSkeleton{
+public class ListingSkeleton extends UnicastRemoteObject{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	public int listingId;
 	public String sellerUsername;
 	public String buyerUsername;
@@ -13,7 +19,7 @@ public class ListingSkeleton{
 	public long currentPrice;
 	public long proposedPrice;
 	
-	public ListingSkeleton()
+	public ListingSkeleton() throws RemoteException
 	{
 		this.listingId = -1;
 		this.sellerUsername = "";
