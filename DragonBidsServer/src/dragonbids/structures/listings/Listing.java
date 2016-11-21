@@ -1,6 +1,12 @@
 package dragonbids.structures.listings;
+
+import java.rmi.RemoteException;
 import java.sql.Timestamp;
+import dragonbids.api.*;
 import java.util.*;
+
+import dragonbids.api.ListingSkeleton;
+
 import java.time.*;
 
 /**
@@ -76,5 +82,28 @@ public abstract class Listing extends Observable
     public String toString()
     {
         return this.getClass() + " // Listing ID: " + listingID;
+    }
+    
+    public final String getDesc()
+    {
+    	return description;
+    }
+    
+    public final String getTitle()
+    {
+    	return title;
+    }
+    
+    public final ListingSkeleton extractSkeleton()
+    {
+    	ListingSkeleton skele = new ListingSkeleton();
+    	skele.auctionDescription = description;
+    	skele.auctionTile = title;
+    	skele.sellerUsername = creatorID;
+    	skele.listingId = listingID;
+    	skele.currentPrice = currentPrice;
+    	skele.auctionCompletionDateTime = expirationDate;
+
+    	return skele;
     }
 }
