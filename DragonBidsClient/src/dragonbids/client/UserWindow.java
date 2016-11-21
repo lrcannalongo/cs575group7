@@ -604,8 +604,7 @@ public class UserWindow extends JFrame {
 		}
 		
 	}
-	
-<<<<<<< HEAD
+
 	private void modifyListing()
 	{
 		if (!waitingForServer)
@@ -622,8 +621,7 @@ public class UserWindow extends JFrame {
 			
 		}
 	}
-}
-=======
+
 	private void activateSellerFeature()
 	{
 		btnModifyItem.setVisible(true);;
@@ -642,4 +640,3 @@ public class UserWindow extends JFrame {
 		buyPendingBidPrice.setVisible(false);
 	}
 }
->>>>>>> refs/remotes/carminevalentino/master
