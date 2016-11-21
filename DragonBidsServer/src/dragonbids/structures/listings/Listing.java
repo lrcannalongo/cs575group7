@@ -82,6 +82,11 @@ public abstract class Listing extends Observable {
 	public final String getTitle() {
 		return title;
 	}
+	
+	public final long getCurrentPrice()
+	{
+		return currentPrice;
+	}
 
 	public final ListingSkeleton extractSkeleton() throws RemoteException {
 		ListingSkeleton skele = new ListingSkeleton();

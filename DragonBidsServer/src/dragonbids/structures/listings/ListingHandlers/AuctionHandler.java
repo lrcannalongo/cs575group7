@@ -11,10 +11,7 @@ public class AuctionHandler implements ListingHandler
 {
     private Auction auction;
     
-    public AuctionHandler(Auction auction)
-    {
-        this.auction = auction;
-    }
+    public AuctionHandler() {}
     
     public boolean modify(Listing lst, ListingSkeleton skele)
     {
@@ -32,6 +29,20 @@ public class AuctionHandler implements ListingHandler
     	{
     		lst.setTitle(skele.auctionTile);
     	}
+    	
+    	//TODO finish implementing bid behavior
+    	
+    	if (!(skele.proposedPrice == 0) && !(skele.buyerUsername.equals("")))
+    	{
+    		if ((placeBid((Auction) lst, skele.buyerUsername, skele.proposedPrice)))
+    		{
+    			// notify user of successful bid
+    		}
+    		else
+    		{
+    			// notify user of failed bid
+    		}
+    	}
     			
     	return false;
     }
@@ -46,7 +57,9 @@ public class AuctionHandler implements ListingHandler
     	
     	return true;
     }
-    public boolean placeBid(String userid, long newBid)
+    
+ 
+    public boolean placeBid(Auction auction, String userid, long newBid)
     {   
         if (newBid <= auction.getHighBid().getBidPrice())
         {
