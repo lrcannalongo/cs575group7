@@ -102,6 +102,11 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	public Vector<ListingSkeleton> getListings() throws RemoteException {
 		// TODO Auto-generated method stub
 		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
+		
+		for (Listing listing : activeListings.values()) {
+			
+		}
+		
 		return listingSkeletonVector;
 	}
 
