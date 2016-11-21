@@ -9,12 +9,11 @@ import javax.swing.event.ChangeListener;
 import javax.swing.event.ChangeEvent;
 import java.awt.Color;
 import java.awt.Font;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-import java.time.format.*;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Iterator;
 import java.util.Vector;
 import java.awt.Toolkit;
 import java.rmi.RemoteException;
@@ -54,12 +53,22 @@ public class UserWindow extends JFrame {
 	private JTextField buySellerUname;
 	private JTextField buyBuyerUname;
 	private JTextArea buyDescription;
+	Vector<ListingSkeleton> listingVector = new Vector<ListingSkeleton>();
+	Iterator<ListingSkeleton> it;
 	private boolean isLoggedIn = false;
+	private int activeAuctionId = -1; //This determines which Listing is loaded in the Listing Details Window
+	
+	private String activeUser = "";
+	private JButton btnModifyItem;
+	private JButton btnContactBuyers;
+	private JButton btnRemoveListing;
+	private JButton btnPlaceBid;
+	
 	
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+ 	public static void main(String[] args) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
@@ -97,6 +106,8 @@ public class UserWindow extends JFrame {
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		DefaultListModel<ListingSkeleton> listingsList = new DefaultListModel<ListingSkeleton>();
+		JList<ListingSkeleton> list = new JList<ListingSkeleton>(listingsList);
 		
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		tabbedPane.addChangeListener(new ChangeListener() {
@@ -109,6 +120,24 @@ public class UserWindow extends JFrame {
 			    	break;
 			    	
 			    case 1: //Listing Detail Tab
+			    	deactivateSellerFeature();
+			    	it = listingVector.iterator();
+			    	while(it.hasNext())
+			    	{
+			    		System.out.print(it.next().listingId);
+			    		if(activeAuctionId == it.next().listingId)
+			    		{
+			    			if(it.next().sellerUsername.equals(activeUser))
+			    			{
+			    				activateSellerFeature();
+			    			}
+			    			else
+			    			{
+			    				deactivateSellerFeature();
+			    			}
+			    			//Populate Listing Details Window with this ListingSkeleton
+			    		}
+			    	}
 			    	break;
 			    	
 			    case 2: //Sell Tab
@@ -117,9 +146,22 @@ public class UserWindow extends JFrame {
 			    case 3: //Browse Tab
 			    	try
 			    	{
-			    		Vector<ListingSkeleton> listingVector = new Vector<ListingSkeleton>();
+			    		listingsList.removeAllElements(); // Clear the Table Out Before Re-populating
+			    		
 			    		listingVector = stub.getListings();
-			    		System.out.println(listingVector.size());
+			    		it = listingVector.iterator();
+			    		while(it.hasNext())
+			    		{
+			    			listingsList.addElement(it.next()); // Add Li
+			    		}
+			    		
+//** DEBUG: Uncomment to Test the Browse Window Population			    		
+			    		ListingSkeleton lsTest = new ListingSkeleton();
+			    		lsTest.listingId = 3;
+			    		lsTest.sellerUsername = "Carmine";
+			    		lsTest.auctionTile = "Test Auction Title";
+			    		listingsList.addElement(lsTest);
+//** END DEBUG
 			    	}
 			    	catch (Exception getListingException)
 			    	{
@@ -296,7 +338,7 @@ public class UserWindow extends JFrame {
 		pListingDetails.add(buyPendingBidPrice);
 		buyPendingBidPrice.setColumns(10);
 		
-		JButton btnPlaceBid = new JButton("Bid");
+		btnPlaceBid = new JButton("Bid");
 		btnPlaceBid.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -336,7 +378,7 @@ public class UserWindow extends JFrame {
 		btnContactSeller.setBounds(577, 125, 117, 29);
 		pListingDetails.add(btnContactSeller);
 		
-		JButton btnContactBuyers = new JButton("Contact Buyers");
+		btnContactBuyers = new JButton("Contact Buyers");
 		btnContactBuyers.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -350,7 +392,7 @@ public class UserWindow extends JFrame {
 		btnContactBuyers.setBounds(577, 59, 136, 29);
 		pListingDetails.add(btnContactBuyers);
 		
-		JButton btnRemoveListing = new JButton("Remove Item");
+		btnRemoveListing = new JButton("Remove Item");
 		btnRemoveListing.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -367,7 +409,7 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.setBounds(577, 31, 117, 29);
 		pListingDetails.add(btnRemoveListing);
 		
-		JButton btnModifyItem = new JButton("Modify Item");
+		btnModifyItem = new JButton("Modify Item");
 		btnModifyItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
@@ -436,15 +478,15 @@ public class UserWindow extends JFrame {
 		tabbedPane.addTab("Browse", null, pBrowseListings, null);
 		pBrowseListings.setLayout(null);
 		
-		DefaultListModel<String> model = new DefaultListModel<String>();
-		JList<String> list = new JList<String>(model);
 		list.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				if (2 == e.getClickCount())
 				{
 					// Double Clicked Auction
-					System.out.println("DEBUG: Index Selected: " + list.getSelectedIndex());
+					System.out.println("DEBUG: You've Selected Listing Id: " + list.getSelectedValue().listingId);
+					activeAuctionId = list.getSelectedValue().listingId;
+					tabbedPane.setSelectedIndex(1); // Select Listing Detail Pane
 				}
 			}
 		});
@@ -455,10 +497,10 @@ public class UserWindow extends JFrame {
 		
 		JPanel pMessages = new JPanel();
 		tabbedPane.addTab("Messages", null, pMessages, null);
-		for (int i = 0; i < 100; ++i)
-		{
-			model.addElement("Auction - Index " + i);
-		}
+//		for (int i = 0; i < 100; ++i)
+//		{
+//			listingsList.addElement("Auction - Index " + i);
+//		}
 		// End Auction Listing Browser
 		
 		JPanel notificationPanel = new JPanel();
@@ -563,6 +605,7 @@ public class UserWindow extends JFrame {
 		
 	}
 	
+<<<<<<< HEAD
 	private void modifyListing()
 	{
 		if (!waitingForServer)
@@ -580,3 +623,23 @@ public class UserWindow extends JFrame {
 		}
 	}
 }
+=======
+	private void activateSellerFeature()
+	{
+		btnModifyItem.setVisible(true);;
+		btnContactBuyers.setVisible(true);
+		btnRemoveListing.setVisible(true);
+		btnPlaceBid.setVisible(false);
+		buyPendingBidPrice.setVisible(false);
+	}
+	
+	private void deactivateSellerFeature()
+	{
+		btnModifyItem.setVisible(false);;
+		btnContactBuyers.setVisible(false);
+		btnRemoveListing.setVisible(false);
+		btnPlaceBid.setVisible(true);
+		buyPendingBidPrice.setVisible(false);
+	}
+}
+>>>>>>> refs/remotes/carminevalentino/master

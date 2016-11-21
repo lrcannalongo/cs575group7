@@ -100,12 +100,13 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public Vector<ListingSkeleton> getListings() throws RemoteException {
-		// TODO Auto-generated method stub
 		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
-		
 		for (Listing listing : activeListings.values()) {
+<<<<<<< HEAD
+=======
+			listingSkeletonVector.add(listing.extractSkeleton());
+>>>>>>> refs/remotes/carminevalentino/master
 		}
-		
 		return listingSkeletonVector;
 	}
 

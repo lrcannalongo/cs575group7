@@ -31,4 +31,10 @@ public class ListingSkeleton extends UnicastRemoteObject{
 		this.proposedPrice = -1;
 		this.auctionCompletionDateTime = null;
 	}
+	
+	@Override
+	public String toString()
+	{
+		return this.auctionTile;
+	}
 }

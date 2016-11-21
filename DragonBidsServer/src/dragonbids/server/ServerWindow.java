@@ -32,7 +32,6 @@ public class ServerWindow extends JFrame {
 	private DragonBidsServer dragonBidsServer;
 	private boolean serverStarted = false;
 	private int portNumber = 1099; // Default Port Number RMI Registry Runs on
-	private JButton btnTestMsgJohnsmith;
 	
 	private static boolean isNumeric(String str)
 	{
@@ -119,21 +118,6 @@ public class ServerWindow extends JFrame {
 		});
 		btnConnect.setBounds(477, 246, 117, 29);
 		contentPane.add(btnConnect);
-		
-		btnTestMsgJohnsmith = new JButton("Test Msg JohnSmith");
-		btnTestMsgJohnsmith.addMouseListener(new MouseAdapter() {
-			@Override
-			public void mouseClicked(MouseEvent e) {
-				//DEBUG
-				NotificationSubject subject = new NotificationSubject();
-				User SomeUser = new User("JohnSmith");
-				subject.attach(SomeUser);
-				subject.notifyObservers("Hi There John!! This is the Server Calling ...");
-				//END DEBUG
-			}
-		});
-		btnTestMsgJohnsmith.setBounds(231, 246, 154, 29);
-		contentPane.add(btnTestMsgJohnsmith);
 		
 	}
 	
