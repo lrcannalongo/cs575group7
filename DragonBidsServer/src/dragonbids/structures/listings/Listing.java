@@ -96,14 +96,20 @@ public abstract class Listing extends Observable
     
     public final ListingSkeleton extractSkeleton()
     {
-    	ListingSkeleton skele = new ListingSkeleton();
-    	skele.auctionDescription = description;
-    	skele.auctionTile = title;
-    	skele.sellerUsername = creatorID;
-    	skele.listingId = listingID;
-    	skele.currentPrice = currentPrice;
-    	skele.auctionCompletionDateTime = expirationDate;
+    	try {
+    		ListingSkeleton skele = new ListingSkeleton();
+        	skele.auctionDescription = description;
+        	skele.auctionTile = title;
+        	skele.sellerUsername = creatorID;
+        	skele.listingId = listingID;
+        	skele.currentPrice = currentPrice;
+        	skele.auctionCompletionDateTime = expirationDate;
 
-    	return skele;
+        	return skele;
+    	}
+    	finally
+    	{
+    		return null;
+    	}
     }
 }
