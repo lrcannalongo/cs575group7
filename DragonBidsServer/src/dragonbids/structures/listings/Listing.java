@@ -4,14 +4,11 @@ import java.rmi.RemoteException;
 import java.sql.Timestamp;
 import dragonbids.api.ListingSkeleton;
 import java.util.*;
-
-import dragonbids.api.ListingSkeleton;
-
 import java.time.*;
 
 /**
  * @author Lew Cannalongo
- * @version 11-11-16
+ * @version 11-21-16
  */
 public abstract class Listing extends Observable {
 	String title;
@@ -40,14 +37,9 @@ public abstract class Listing extends Observable {
 		setPhoto(photo);
 
 	}
+	
+	// setter methods. consider making PROTETECTED rather than PUBLIC and moving Handler classes into Listing package
 
-	public long timeLeft() {
-		return Duration.between(LocalDateTime.now(), expirationDate).toMinutes();
-	}
-
-	public LocalDateTime getExpiration() {
-		return expirationDate;
-	}
 
 	public void setExpiration(LocalDateTime endingTime) {
 		expirationDate = endingTime;
@@ -70,11 +62,14 @@ public abstract class Listing extends Observable {
 	public void setPhoto(Object photo) {
 		this.photo = photo;
 	}
-
+	
+	@Override
 	public String toString() {
-		return this.getClass() + " // Listing ID: " + listingID;
+		return this.getClass() + " // Listing ID: " + listingID + " // " + this.title;
 	}
 
+	// getter methods
+		
 	public final String getDesc() {
 		return description;
 	}
@@ -86,6 +81,14 @@ public abstract class Listing extends Observable {
 	public final long getCurrentPrice()
 	{
 		return currentPrice;
+	}
+	
+	public final long timeLeft() {
+		return Duration.between(LocalDateTime.now(), expirationDate).toMinutes();
+	}
+
+	public final LocalDateTime getExpiration() {
+		return expirationDate;
 	}
 
 	public final ListingSkeleton extractSkeleton() throws RemoteException {

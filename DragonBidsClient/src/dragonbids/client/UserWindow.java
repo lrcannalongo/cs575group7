@@ -397,8 +397,7 @@ public class UserWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					// remove listing 999 for test purposes
-					stub.remoteListing(999);
+					removeListing();
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null, "Listing not found on server");
@@ -414,7 +413,7 @@ public class UserWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				try {
-					stub.modifyListing(new ListingSkeleton());
+					modifyListing();
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					JOptionPane.showMessageDialog(null,  "Listing not found on server");
@@ -605,13 +604,24 @@ public class UserWindow extends JFrame {
 		
 	}
 
-	private void modifyListing()
+	private void modifyListing() throws RemoteException
 	{
 		if (!waitingForServer)
 		{
 			try
 			{
-				ListingSkeleton modListing = new ListingSkeleton(); //will require updated listing skeleton constructor
+				ListingSkeleton modListing = new ListingSkeleton();
+				modListing.auctionTile = buyTitle.getText();
+				modListing.auctionDescription = buyDescription.getText();
+				modListing.listingId = activeAuctionId;
+			//	modListing.extendAuctionMinutes = [] // consider changing this to "proposedEndTime" 
+				
+//** DEBUG: Uncomment to Test modifying listing 1 on server
+ //modListing.auctionTile = "Title Changed!";
+ //modListing.auctionDescription = "A better description!";
+ //modListing.listingId = 1;
+//** END DEBUG */
+			
 				stub.modifyListing(modListing);
 			}
 			catch (RemoteException e)
@@ -619,6 +629,18 @@ public class UserWindow extends JFrame {
 				// failed to invoke on server
 			}
 			
+		}
+	}
+	
+	private void removeListing() throws RemoteException
+	{
+		try
+		{
+			stub.remoteListing(activeAuctionId);
+		}
+		catch (RemoteException e)
+		{
+			//failed to invoke on server
 		}
 	}
 
