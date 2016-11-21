@@ -565,12 +565,12 @@ public class UserWindow extends JFrame {
 					}
 					LocalDateTime completeDateTime;
 					try {
-						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 						completeDateTime = LocalDateTime.parse(Duration,dateFormat);
 					}
 					catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null,"Invalid DateTime Format yyyy/MM/dd HH:mm:ss");
+						JOptionPane.showMessageDialog(null,"Invalid DateTime Format dd/MM/yyyy HH:mm");
 						return;
 					}
 					ListingSkeleton listing= new ListingSkeleton();
@@ -580,7 +580,10 @@ public class UserWindow extends JFrame {
 					listing.auctionCompletionDateTime= completeDateTime;
 					if(stub.createListing(listing)) {
 						//TODO: Redirect to another tab
+
+						System.out.println("New Auction added: " +Title);
 						JOptionPane.showMessageDialog(null, "Done!");
+
 					}
 
 				}
