@@ -354,6 +354,13 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				try {
+					// remove listing 999 for test purposes
+					stub.remoteListing(999);
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null, "Listing not found on server");
+				}
 			}
 		});
 		btnRemoveListing.setForeground(Color.RED);
@@ -364,6 +371,12 @@ public class UserWindow extends JFrame {
 		btnModifyItem.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
+				try {
+					stub.modifyListing(new ListingSkeleton());
+				} catch (RemoteException e1) {
+					// TODO Auto-generated catch block
+					JOptionPane.showMessageDialog(null,  "Listing not found on server");
+				}
 				
 			}
 		});

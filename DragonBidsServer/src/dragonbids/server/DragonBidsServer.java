@@ -104,7 +104,6 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
 		
 		for (Listing listing : activeListings.values()) {
-			
 		}
 		
 		return listingSkeletonVector;
@@ -132,9 +131,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (listingToMod instanceof Auction)
 		{
 			AuctionHandler hndl = new AuctionHandler((Auction) listingToMod);
-			hndl.modify(arg0);
-			// rest of method NYI
-			
+			hndl.modify(listingToMod, arg0);
 		}
 		
 		
@@ -148,7 +145,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	}
 
 	
-	public boolean removeListing(int listingId) throws RemoteException {
+	public boolean remoteListing(int listingId) throws RemoteException {
 		// TODO Auto-generated method stub
 		// TODO implement observer notification so that bidders know auction is canceled
 		Listing lst = activeListings.remove(listingId);
@@ -157,12 +154,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	}
 	
 	private Listing getListing(ListingSkeleton skeleton){
-		
-		
-		Listing listing = activeListings.get(skeleton.listingId);
-		
-		return listing;
-		
+		return activeListings.get(skeleton.listingId);
 	}
 
 }
