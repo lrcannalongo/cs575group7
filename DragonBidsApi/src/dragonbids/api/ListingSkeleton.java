@@ -1,10 +1,10 @@
 package dragonbids.api;
 
+import java.io.Serializable;
 import java.rmi.RemoteException;
-import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDateTime;
 
-public class ListingSkeleton extends UnicastRemoteObject{
+public class ListingSkeleton implements Serializable{
 	/**
 	 * 
 	 */

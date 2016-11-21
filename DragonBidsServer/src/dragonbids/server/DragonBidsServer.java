@@ -23,6 +23,13 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
 	private HashMap<Integer, Listing> activeListings = new HashMap<Integer, Listing>(); //collection of active listings held on server
     private int lastAuctionUID=0;
+    private ListingFactory listingFactory;
+    
+    public DragonBidsServer()
+    {
+    	listingFactory = new ListingFactory();
+    }
+    
 	public boolean bindServerToRegister(int port)
 	{
 		boolean bindSuccess = false;
@@ -87,15 +94,20 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean createListing(ListingSkeleton arg0) throws RemoteException {
-
-
-		ListingFactory factory=new ListingFactory();
 		lastAuctionUID+=1;
 		//Todo: Add duration to listing
-		Listing newAuction=factory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
-		activeListings.put(lastAuctionUID,newAuction);
-		return true;
-		//Todo : When should this return false ?
+		Listing newListing = null;
+		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
+		if (null != newListing)
+		{
+			activeListings.put(lastAuctionUID, newListing);
+			System.out.println("DEBUG: Listing Created");
+			return true;
+		}
+		else
+		{
+			return false;
+		}
 	}
 
 	@Override
