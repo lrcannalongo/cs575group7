@@ -101,7 +101,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (null != newListing)
 		{
 			activeListings.put(lastAuctionUID, newListing);
-			System.out.println("DEBUG: Listing Created");
+			System.out.println("Listing Created: " + newListing.getTitle());
 			return true;
 		}
 		else
