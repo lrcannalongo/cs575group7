@@ -600,6 +600,8 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.setVisible(true);
 		btnPlaceBid.setVisible(false);
 		buyPendingBidPrice.setVisible(false);
+		buyTitle.setEditable(true);
+		buyDescription.setEditable(true);
 	}
 	
 	private void deactivateSellerFeature()
@@ -609,5 +611,7 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.setVisible(false);
 		btnPlaceBid.setVisible(true);
 		buyPendingBidPrice.setVisible(true);
+		buyTitle.setEditable(false);
+		buyDescription.setEditable(false);
 	}
 }
