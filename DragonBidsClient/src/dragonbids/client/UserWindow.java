@@ -481,7 +481,6 @@ public class UserWindow extends JFrame {
 				if (2 == e.getClickCount())
 				{
 					// Double Clicked Auction
-					System.out.println("DEBUG: You've Selected Listing Id: " + listingsList.getElementAt(list.getSelectedIndex()).listingId);
 					activeAuctionId = listingsList.getElementAt(list.getSelectedIndex()).listingId;
 					tabbedPane.setSelectedIndex(1); // Select Listing Detail Pane
 				}
@@ -584,14 +583,14 @@ public class UserWindow extends JFrame {
 						return;
 					}
 					ListingSkeleton listing= new ListingSkeleton();
-					listing.auctionDescription= Description;
-					listing.auctionTile=Title;
-					listing.sellerUsername= usernameInput.getText();
-					listing.auctionCompletionDateTime= completeDateTime;
+					listing.auctionDescription = Description;
+					listing.auctionTile = Title;
+					listing.sellerUsername = usernameInput.getText();
+					listing.auctionCompletionDateTime = completeDateTime;
 					if(stub.createListing(listing)) {
 						//TODO: Redirect to another tab
 
-						System.out.println("New Auction added: " +Title);
+						System.out.println("Server Created New Listing: " + Title);
 						JOptionPane.showMessageDialog(null, "Done!");
 
 					}
