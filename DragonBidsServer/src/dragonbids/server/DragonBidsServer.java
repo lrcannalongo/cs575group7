@@ -100,7 +100,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (null != newListing)
 		{
 			activeListings.put(lastAuctionUID, newListing);
-			System.out.println("DEBUG: Listing Created");
+			System.out.println("Listing Created: " + newListing.getTitle());
 			return true;
 		}
 		else
@@ -143,6 +143,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		{
 			AuctionHandler hndl = new AuctionHandler();
 			hndl.modify(listingToMod, arg0);
+			System.out.println("Modified Listing: " + listingToMod.getTitle());
 		}
 		
 		return false;
@@ -162,6 +163,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		{
 			Listing lst = activeListings.remove(listingId); // dummy assingment in case we decide to do something with the removed listing
 		 // lst.notifyObservers(new ListingRemovedNotification());
+			System.out.println("Removed Listing: " + lst.getTitle());
 			return true;
 		}
 		

@@ -64,7 +64,6 @@ public class UserWindow extends JFrame {
 	private JButton btnRemoveListing;
 	private JButton btnPlaceBid;
 	
-	
 	/**
 	 * Launch the application.
 	 */
@@ -124,10 +123,15 @@ public class UserWindow extends JFrame {
 			    	it = listingVector.iterator();
 			    	while(it.hasNext())
 			    	{
-			    		System.out.print(it.next().listingId);
-			    		if(activeAuctionId == it.next().listingId)
+			    		ListingSkeleton thisListing = it.next();
+			    		if(activeAuctionId == thisListing.listingId)
 			    		{
-			    			if(it.next().sellerUsername.equals(activeUser))
+			    			buyTitle.setText(thisListing.auctionTile);
+			    			buyDescription.setText(thisListing.auctionDescription);
+			    			buyCurrentPrice.setText(Long.toString(thisListing.currentPrice));
+			    			LocalDateTime timeRemaining = LocalDateTime.of(thisListing.auctionCompletionDateTime.toLocalDate(),thisListing.auctionCompletionDateTime.toLocalTime());
+			    			buyTimeLeft.setText(timeRemaining.toString());
+			    			if(thisListing.sellerUsername.equals(activeUser))
 			    			{
 			    				activateSellerFeature();
 			    			}
@@ -155,13 +159,6 @@ public class UserWindow extends JFrame {
 			    			listingsList.addElement(it.next()); // Add Li
 			    		}
 			    		
-//** DEBUG: Uncomment to Test the Browse Window Population			    		
-			    		ListingSkeleton lsTest = new ListingSkeleton();
-			    		lsTest.listingId = 3;
-			    		lsTest.sellerUsername = "Carmine";
-			    		lsTest.auctionTile = "Test Auction Title";
-			    		listingsList.addElement(lsTest);
-//** END DEBUG
 			    	}
 			    	catch (Exception getListingException)
 			    	{
@@ -234,6 +231,7 @@ public class UserWindow extends JFrame {
 						lblLoggedInUser.setText((String)usernameInput.getText());
 						lblLoggedInUser.setVisible(true);
 						isLoggedIn = true;
+						activeUser = (String)usernameInput.getText();
 					}
 					else
 					{
@@ -244,6 +242,7 @@ public class UserWindow extends JFrame {
 						lblLoggedInUser.setText((String)usernameInput.getText());
 						lblLoggedInUser.setVisible(true);
 						isLoggedIn = true;
+						activeUser = (String)usernameInput.getText();
 					}
 				}
 				catch (RemoteException e2)
@@ -320,7 +319,6 @@ public class UserWindow extends JFrame {
 		lblNewLabel_8.setBounds(6, 169, 80, 16);
 		pListingDetails.add(lblNewLabel_8);
 		
-		JTextArea buyDescription;
 		buyDescription = new JTextArea();
 		buyDescription.setLineWrap(true);
 		buyDescription.setWrapStyleWord(true);
@@ -483,8 +481,7 @@ public class UserWindow extends JFrame {
 				if (2 == e.getClickCount())
 				{
 					// Double Clicked Auction
-					System.out.println("DEBUG: You've Selected Listing Id: " + list.getSelectedValue().listingId);
-					activeAuctionId = list.getSelectedValue().listingId;
+					activeAuctionId = listingsList.getElementAt(list.getSelectedIndex()).listingId;
 					tabbedPane.setSelectedIndex(1); // Select Listing Detail Pane
 				}
 			}
@@ -577,22 +574,25 @@ public class UserWindow extends JFrame {
 					}
 					LocalDateTime completeDateTime;
 					try {
-						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
 						completeDateTime = LocalDateTime.parse(Duration,dateFormat);
 					}
 					catch (Exception e)
 					{
-						JOptionPane.showMessageDialog(null,"Invalid DateTime Format yyyy/MM/dd HH:mm:ss");
+						JOptionPane.showMessageDialog(null,"Invalid DateTime Format dd/MM/yyyy HH:mm");
 						return;
 					}
 					ListingSkeleton listing= new ListingSkeleton();
-					listing.auctionDescription= Description;
-					listing.auctionTile=Title;
-					listing.sellerUsername= usernameInput.getText();
-					listing.auctionCompletionDateTime= completeDateTime;
+					listing.auctionDescription = Description;
+					listing.auctionTile = Title;
+					listing.sellerUsername = usernameInput.getText();
+					listing.auctionCompletionDateTime = completeDateTime;
 					if(stub.createListing(listing)) {
 						//TODO: Redirect to another tab
+
+						System.out.println("Server Created New Listing: " + Title);
 						JOptionPane.showMessageDialog(null, "Done!");
+
 					}
 
 				}
@@ -651,6 +651,8 @@ public class UserWindow extends JFrame {
 		btnRemoveListing.setVisible(true);
 		btnPlaceBid.setVisible(false);
 		buyPendingBidPrice.setVisible(false);
+		buyTitle.setEditable(true);
+		buyDescription.setEditable(true);
 	}
 	
 	private void deactivateSellerFeature()
@@ -659,6 +661,8 @@ public class UserWindow extends JFrame {
 		btnContactBuyers.setVisible(false);
 		btnRemoveListing.setVisible(false);
 		btnPlaceBid.setVisible(true);
-		buyPendingBidPrice.setVisible(false);
+		buyPendingBidPrice.setVisible(true);
+		buyTitle.setEditable(false);
+		buyDescription.setEditable(false);
 	}
 }
