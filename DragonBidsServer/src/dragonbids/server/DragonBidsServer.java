@@ -71,7 +71,6 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	
 	@Override
 	public boolean createUser(String username) throws RemoteException {
-		// TODO Auto-generated method stub
 		Iterator<User> it = activeUsers.iterator();
 		while(it.hasNext())
 		{
@@ -95,7 +94,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	@Override
 	public boolean createListing(ListingSkeleton arg0) throws RemoteException {
 		lastAuctionUID+=1;
-		//Todo: Add duration to listing
+		//TODO Add duration to listing
 		Listing newListing = null;
 		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
 		if (null != newListing)
@@ -114,7 +113,9 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	public Vector<ListingSkeleton> getListings() throws RemoteException {
 		Vector<ListingSkeleton> listingSkeletonVector = new Vector<ListingSkeleton>();
 		for (Listing listing : activeListings.values()) {
+
 			listingSkeletonVector.add(listing.extractSkeleton());
+
 		}
 		return listingSkeletonVector;
 	}
@@ -127,17 +128,22 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 	@Override
 	public boolean modifyListing(ListingSkeleton arg0) throws RemoteException {
+		//THOUGHTS: create singletons for a Handler of each of each ListingType
+		//			handler has one method: modify(Listing, ListingSkeleton) that
+		//			updates the Listing to the spec described by ListingSkeleton
+		//          >>rolls bid placement into the modify(Listing, ListingSkeleton) method of Handler
+		//          >>allows listing to be responsible for defining how to place bid, etc
+		//          ** IS A STRATEGY PATTERN **
+		
 		// TODO Auto-generated method stub
 		// TODO finish modification of existing listing object
 		Listing listingToMod = getListing(arg0);
 		
 		if (listingToMod instanceof Auction)
 		{
-			AuctionHandler hndl = new AuctionHandler((Auction) listingToMod);
-			// rest of method NYI
-			
+			AuctionHandler hndl = new AuctionHandler();
+			hndl.modify(listingToMod, arg0);
 		}
-		
 		
 		return false;
 	}
@@ -148,19 +154,22 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		return false;
 	}
 
-	@Override
-	public boolean remoteListing(int arg0) throws RemoteException {
+	
+	public boolean remoteListing(int listingId) throws RemoteException {
 		// TODO Auto-generated method stub
+		// TODO implement observer notification so that bidders know auction is canceled
+		if (activeListings.containsKey(listingId))
+		{
+			Listing lst = activeListings.remove(listingId); // dummy assingment in case we decide to do something with the removed listing
+		 // lst.notifyObservers(new ListingRemovedNotification());
+			return true;
+		}
+		
 		return false;
 	}
 	
 	private Listing getListing(ListingSkeleton skeleton){
-		
-		
-		Listing listing = activeListings.get(skeleton.listingId);
-		
-		return listing;
-		
+		return activeListings.get(skeleton.listingId);
 	}
 
 }
