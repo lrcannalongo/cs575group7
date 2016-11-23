@@ -5,12 +5,13 @@ import java.sql.Timestamp;
 import dragonbids.api.ListingSkeleton;
 import java.util.*;
 import java.time.*;
+import java.io.Serializable;
 
 /**
  * @author Lew Cannalongo
  * @version 11-21-16
  */
-public abstract class Listing extends Observable {
+public abstract class Listing extends Observable implements Serializable {
 	String title;
 	String description;
 	int listingID;
@@ -19,6 +20,7 @@ public abstract class Listing extends Observable {
 	LocalDateTime expirationDate;
 	String creatorID;
 	Object photo;
+	private static final long serialVersionUID = 856;
 
 	// using a variety of setProperty() methods allows a proxy to easily
 	// manipulate a Listing
