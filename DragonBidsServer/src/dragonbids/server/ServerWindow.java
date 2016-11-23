@@ -145,6 +145,7 @@ public class ServerWindow extends JFrame {
 			
 			if (true == rmiRegister.destroyRegister()) // We have a running RMI Register, so lets destroy it
 			{
+				dragonBidsServer.shutdownProcess();
 				serverStarted = false;
 				btnConnect.setText("Start Server");
 				System.out.println("RMI Register Destroyed...");

@@ -15,6 +15,11 @@ import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.Vector;
 import java.util.HashMap;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
+import java.io.IOException;
+	
 
 public class DragonBidsServer implements DragonBidsServer_I {
 	
@@ -100,7 +105,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		if (null != newListing)
 		{
 			activeListings.put(lastAuctionUID, newListing);
-			System.out.println("DEBUG: Listing Created");
+			System.out.println("Listing Created: " + newListing.getTitle());
 			return true;
 		}
 		else
@@ -143,6 +148,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		{
 			AuctionHandler hndl = new AuctionHandler();
 			hndl.modify(listingToMod, arg0);
+			System.out.println("Modified Listing: " + listingToMod.getTitle());
 		}
 		
 		return false;
@@ -162,6 +168,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		{
 			Listing lst = activeListings.remove(listingId); // dummy assingment in case we decide to do something with the removed listing
 		 // lst.notifyObservers(new ListingRemovedNotification());
+			System.out.println("Removed Listing: " + lst.getTitle());
 			return true;
 		}
 		
@@ -171,5 +178,34 @@ public class DragonBidsServer implements DragonBidsServer_I {
 	private Listing getListing(ListingSkeleton skeleton){
 		return activeListings.get(skeleton.listingId);
 	}
-
+	
+	
+	//save the active listings for use later
+	protected void shutdownProcess()
+	{
+		File listings = new File(System.getProperty("user.dir") + "/activeListings.lst");
+		File users = new File(System.getProperty("user.dir") + "/activeUsers.lst");
+		try{
+			//write listings
+			FileOutputStream fout = new FileOutputStream(listings);
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(activeListings);
+			oos.close();
+			fout.close();
+			
+			//write users
+			fout = new FileOutputStream(users);
+			oos = new ObjectOutputStream(fout);
+			oos.writeObject(activeUsers);
+			oos.close();
+			fout.close();
+			
+			System.out.println("Active listings saved in " + listings.toString());
+			System.out.println("Ative users saved in " + users.toString());
+		}
+		catch (IOException e)
+		{
+			System.out.println("ERROR: Listing file not created");
+		}
+	}
 }
