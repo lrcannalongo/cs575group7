@@ -1,6 +1,7 @@
 package dragonbids.server;
 
 import dragonbids.api.*;
+import java.io.*;
 import dragonbids.structures.listings.Listing;
 import dragonbids.structures.listings.ListingFactory;
 
@@ -14,24 +15,31 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.Iterator;
 import java.util.Vector;
+import java.util.Dictionary.*;
 import java.util.HashMap;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.ObjectOutputStream;
 import java.io.IOException;
+import java.util.Collection;
+import java.util.Collections;
+import java.beans.XMLEncoder;
 	
 
 public class DragonBidsServer implements DragonBidsServer_I {
 	
 	private Registry registry;
 	private String dragonBidsServer = "DragonBids";
-	private Vector<User> activeUsers = new Vector<User>(); //Vector of User Classes Held by the server
-	private HashMap<Integer, Listing> activeListings = new HashMap<Integer, Listing>(); //collection of active listings held on server
-    private int lastAuctionUID=0;
+	private Vector<User> activeUsers;  //Vector of User Classes Held by the server
+	protected HashMap<Integer, Listing> activeListings; //collection of active listings held on server
+    private int lastAuctionUID;
     private ListingFactory listingFactory;
     
     public DragonBidsServer()
     {
+    	activeUsers = new Vector<User>();
+    	activeListings = new HashMap<Integer, Listing>();
+    	startupProcess();
     	listingFactory = new ListingFactory();
     }
     
@@ -88,6 +96,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 
 		try {
 			activeUsers.add(new User(username)); // Create new user, and add to our vector
+			writeUsers();
 			return true;
 		}
 		catch(Exception e)
@@ -106,6 +115,8 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		{
 			activeListings.put(lastAuctionUID, newListing);
 			System.out.println("Listing Created: " + newListing.getTitle());
+			System.out.println(activeListings.toString());
+			writeListings();
 			return true;
 		}
 		else
@@ -179,33 +190,78 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		return activeListings.get(skeleton.listingId);
 	}
 	
-	
-	//save the active listings for use later
-	protected void shutdownProcess()
+	private final void writeListings()
 	{
-		File listings = new File(System.getProperty("user.dir") + "/activeListings.lst");
-		File users = new File(System.getProperty("user.dir") + "/activeUsers.lst");
 		try{
-			//write listings
+			
+			File listings = new File(System.getProperty("user.dir") + "/activeListings.ser");
 			FileOutputStream fout = new FileOutputStream(listings);
 			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			
+			HashMap<Integer, Listing> tmp = new HashMap<Integer, Listing>();
+
+			tmp.putAll(activeListings);
+			
 			oos.writeObject(activeListings);
 			oos.close();
 			fout.close();
-			
-			//write users
-			fout = new FileOutputStream(users);
-			oos = new ObjectOutputStream(fout);
-			oos.writeObject(activeUsers);
-			oos.close();
-			fout.close();
-			
-			System.out.println("Active listings saved in " + listings.toString());
-			System.out.println("Ative users saved in " + users.toString());
+			System.out.println("Listings written to disk.");
 		}
 		catch (IOException e)
 		{
-			System.out.println("ERROR: Listing file not created");
+			System.out.println("ERROR: Listing file not written.");
+		}	
+	}
+	
+	private final void writeUsers()
+	{
+		try{
+			
+			File users = new File(System.getProperty("user.dir") + "/activeUsers.ser");
+			FileOutputStream fout = new FileOutputStream(users);
+			ObjectOutputStream oos = new ObjectOutputStream(fout);
+			oos.writeObject(activeUsers);
+			oos.close();
+			fout.close();
+			System.out.println("Active users written to disk. ");
+
+
 		}
+		catch (IOException e)
+		{
+			System.out.println("ERROR: User file not written.");
+		}
+		
+	}
+	
+	private final void startupProcess()
+	{
+		try
+		{
+			FileInputStream fin; 
+			ObjectInputStream ois;
+			
+			//read active listings
+			fin = new FileInputStream(System.getProperty("user.dir") + "/activeListings.ser");
+			ois = new ObjectInputStream(fin);
+			activeListings = (HashMap<Integer, Listing>) ois.readObject();
+			lastAuctionUID = Collections.max(activeListings.keySet());
+			ois.close();
+			fin.close();
+			
+			
+			//read active users
+			fin = new FileInputStream(System.getProperty("user.dir") + "/activeUsers.ser");
+			ois = new ObjectInputStream(fin);
+			activeUsers = (Vector<User>) ois.readObject();
+			ois.close();
+			fin.close();
+			
+		}
+		catch (Exception e)
+		{
+			System.out.println("ERROR");
+		}
+		
 	}
 }
