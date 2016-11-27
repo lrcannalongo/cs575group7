@@ -180,6 +180,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 			Listing lst = activeListings.remove(listingId); // dummy assingment in case we decide to do something with the removed listing
 		 // lst.notifyObservers(new ListingRemovedNotification());
 			System.out.println("Removed Listing: " + lst.getTitle());
+			writeListings();
 			return true;
 		}
 		
