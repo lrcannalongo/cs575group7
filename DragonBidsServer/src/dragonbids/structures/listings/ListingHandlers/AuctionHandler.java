@@ -60,11 +60,11 @@ public class AuctionHandler implements ListingHandler
         return true;
     }
     
-    public boolean modifyPhoto(Object photo)
-    {
-        auction.setPhoto(photo);
-        return true;
-    }
+//    public boolean modifyPhoto(Object photo)
+//    {
+//        auction.setPhoto(photo);
+//        return true;
+//    }
     
     /* 
      * this section is under construction for new implementation of strategy pattern for handling changes to listings residing on server

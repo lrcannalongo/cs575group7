@@ -5,12 +5,17 @@ import java.sql.Timestamp;
 import dragonbids.api.ListingSkeleton;
 import java.util.*;
 import java.time.*;
+import java.io.Serializable;
 
 /**
  * @author Lew Cannalongo
  * @version 11-21-16
  */
-public abstract class Listing extends Observable {
+public class Listing extends Observable implements Serializable {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 2408533539417957356L;
 	String title;
 	String description;
 	int listingID;
@@ -18,7 +23,7 @@ public abstract class Listing extends Observable {
 	LocalDateTime createDate;
 	LocalDateTime expirationDate;
 	String creatorID;
-	Object photo;
+	//Object photo;
 
 	// using a variety of setProperty() methods allows a proxy to easily
 	// manipulate a Listing
@@ -34,7 +39,7 @@ public abstract class Listing extends Observable {
 		setStartingPrice(startingPrice);
 		setTitle(title);
 		setDesc(description);
-		setPhoto(photo);
+//		setPhoto(photo);
 
 	}
 	
@@ -59,10 +64,10 @@ public abstract class Listing extends Observable {
 		this.description = desc;
 	}
 
-	public void setPhoto(Object photo) {
-		this.photo = photo;
-	}
-	
+//	public void setPhoto(Object photo) {
+//		this.photo = photo;
+//	}
+//	
 	@Override
 	public String toString() {
 		return this.getClass() + " // Listing ID: " + listingID + " // " + this.title;
@@ -89,6 +94,11 @@ public abstract class Listing extends Observable {
 
 	public final LocalDateTime getExpiration() {
 		return expirationDate;
+	}
+	
+	public final int getListingID()
+	{
+		return listingID;
 	}
 
 	public final ListingSkeleton extractSkeleton() throws RemoteException {
