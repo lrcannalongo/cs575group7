@@ -100,6 +100,11 @@ public class Listing extends Observable implements Serializable {
 	{
 		return listingID;
 	}
+	
+	public final String getCreator()
+	{
+		return creatorID;
+	}
 
 	public final ListingSkeleton extractSkeleton() throws RemoteException {
 		ListingSkeleton skele = new ListingSkeleton();

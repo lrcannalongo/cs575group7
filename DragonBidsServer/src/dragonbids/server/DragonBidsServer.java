@@ -160,6 +160,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 			AuctionHandler hndl = new AuctionHandler();
 			hndl.modify(listingToMod, arg0);
 			System.out.println("Modified Listing: " + listingToMod.getTitle());
+			writeListings();
 		}
 		
 		return false;

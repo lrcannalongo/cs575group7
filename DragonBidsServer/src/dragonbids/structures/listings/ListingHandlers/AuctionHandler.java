@@ -94,7 +94,7 @@ public class AuctionHandler implements ListingHandler
     	//TODO finish implementing bid behavior
     	
     	// if there is a proposed price change from someone not the seller
-    	if (!(skele.proposedPrice == 0) && !(skele.buyerUsername.equals("")))
+    	if (!(skele.proposedPrice == 0) && !(skele.buyerUsername.equals("") && !(skele.sellerUsername.equals(lst.getCreator()))))
     	{
     		if ((placeBid(auctionToMod, skele.buyerUsername, skele.proposedPrice)))
     		{

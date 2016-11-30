@@ -341,6 +341,14 @@ public class UserWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// If my value in the text box is expressed in cents
+				try{
+					modifyListing();
+				}
+				catch (Exception ex)
+				{
+					//
+				}
+				
 				
 			}
 		});
@@ -614,6 +622,8 @@ public class UserWindow extends JFrame {
 				modListing.auctionTile = buyTitle.getText();
 				modListing.auctionDescription = buyDescription.getText();
 				modListing.listingId = activeAuctionId;
+				modListing.proposedPrice = Long.parseLong(buyPendingBidPrice.getText());
+				modListing.buyerUsername = activeUser;
 			//	modListing.extendAuctionMinutes = [] // consider changing this to "proposedEndTime" 
 				
 //** DEBUG: Uncomment to Test modifying listing 1 on server
