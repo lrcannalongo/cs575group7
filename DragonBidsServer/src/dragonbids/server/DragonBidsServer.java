@@ -37,6 +37,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
     
     public DragonBidsServer()
     {
+    	lastAuctionUID = 0;
     	activeUsers = new Vector<User>();
     	activeListings = new HashMap<Integer, Listing>();
     	startupProcess();
@@ -157,9 +158,9 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		
 		if (listingToMod instanceof Auction)
 		{
-			AuctionHandler hndl = new AuctionHandler();
-			hndl.modify(listingToMod, arg0);
+			AuctionHandler hndl = new AuctionHandler();			
 			System.out.println("Modified Listing: " + listingToMod.getTitle());
+			System.out.println(hndl.modify(listingToMod, arg0));
 			writeListings();
 		}
 		
@@ -262,7 +263,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		}
 		catch (Exception e)
 		{
-			System.out.println("ERROR");
+			System.out.println("No server files loaded.");
 		}
 		
 	}

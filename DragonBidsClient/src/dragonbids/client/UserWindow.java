@@ -622,8 +622,14 @@ public class UserWindow extends JFrame {
 				modListing.auctionTile = buyTitle.getText();
 				modListing.auctionDescription = buyDescription.getText();
 				modListing.listingId = activeAuctionId;
+				try{
 				modListing.proposedPrice = Long.parseLong(buyPendingBidPrice.getText());
 				modListing.buyerUsername = activeUser;
+				}
+				catch (Exception e)
+				{
+					// need a better way to handle
+				}
 			//	modListing.extendAuctionMinutes = [] // consider changing this to "proposedEndTime" 
 				
 //** DEBUG: Uncomment to Test modifying listing 1 on server
