@@ -111,7 +111,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		lastAuctionUID+=1;
 		//TODO Add duration to listing
 		Listing newListing = null;
-		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
+		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription, arg0.auctionCompletionDateTime);
 		if (null != newListing)
 		{
 			activeListings.put(lastAuctionUID, newListing);
