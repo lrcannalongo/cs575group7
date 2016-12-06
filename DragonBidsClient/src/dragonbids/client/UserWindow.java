@@ -6,14 +6,23 @@ import java.awt.EventQueue;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import javax.swing.event.ChangeListener;
+
+import org.jdatepicker.impl.JDatePanelImpl;
+import org.jdatepicker.impl.JDatePickerImpl;
+import org.jdatepicker.impl.UtilDateModel;
+
 import javax.swing.event.ChangeEvent;
 import java.awt.Color;
 import java.awt.Font;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.Properties;
 import java.util.Vector;
 import java.awt.Toolkit;
 import java.rmi.RemoteException;
@@ -43,7 +52,7 @@ public class UserWindow extends JFrame {
 	private JLabel lblServerTime;
 	private SimpleDateFormat time;
 	private JPanel pAccount;
-	private JTextField sellDuration;
+	private JDatePickerImpl sellDuration;
 	private JTextField sellTitle;
 	private JTextArea sellDescription;
 	private JTextField buyTitle;
@@ -341,6 +350,14 @@ public class UserWindow extends JFrame {
 			@Override
 			public void mouseClicked(MouseEvent e) {
 				// If my value in the text box is expressed in cents
+				try{
+					modifyListing();
+				}
+				catch (Exception ex)
+				{
+					//
+				}
+				
 				
 			}
 		});
@@ -443,7 +460,7 @@ public class UserWindow extends JFrame {
 		lblNewLabel_1.setBounds(6, 25, 80, 16);
 		pCreateAuction.add(lblNewLabel_1);
 		
-		JLabel lblNewLabel_3 = new JLabel("Duration:");
+		JLabel lblNewLabel_3 = new JLabel("Expiration:");
 		lblNewLabel_3.setHorizontalAlignment(SwingConstants.RIGHT);
 		lblNewLabel_3.setBounds(6, 70, 80, 16);
 		pCreateAuction.add(lblNewLabel_3);
@@ -459,10 +476,19 @@ public class UserWindow extends JFrame {
 		sellDescription.setBounds(122, 116, 445, 106);
 		pCreateAuction.add(sellDescription);
 		
-		sellDuration = new JTextField();
+		
+		UtilDateModel model = new UtilDateModel();
+		Properties p = new Properties();
+		p.put("text.today", "Today");
+		p.put("text.month", "Month");
+		p.put("text.year", "Year");
+		JDatePanelImpl datePanel = new JDatePanelImpl(model, p);
+		JDatePickerImpl datePicker = new JDatePickerImpl(datePanel, new DateLabelFormatter());
+		
+		sellDuration = datePicker;
 		sellDuration.setBounds(122, 65, 130, 26);
 		pCreateAuction.add(sellDuration);
-		sellDuration.setColumns(10);
+		//sellDuration.setColumns(10);
 		
 		sellTitle = new JTextField();
 		sellTitle.setBounds(122, 20, 445, 26);
@@ -559,7 +585,8 @@ public class UserWindow extends JFrame {
 				try{
 					String Title=sellTitle.getText();
 					String Description= sellDescription.getText();
-					String Duration= sellDuration.getText();
+					Date Duration= (Date) sellDuration.getModel().getValue();					
+					LocalDateTime exp = LocalDateTime.ofInstant(Duration.toInstant(), ZoneId.systemDefault());
 					if(Title.length()<3){
 						JOptionPane.showMessageDialog(null,"You need to input a Title");
 						return;
@@ -568,25 +595,31 @@ public class UserWindow extends JFrame {
 						JOptionPane.showMessageDialog(null,"You need to input a Description");
 						return;
 					}
-					if(Duration.length()<10){
-						JOptionPane.showMessageDialog(null,"You need to input a Duration");
-						return;
-					}
-					LocalDateTime completeDateTime;
-					try {
-						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
-						completeDateTime = LocalDateTime.parse(Duration,dateFormat);
-					}
-					catch (Exception e)
-					{
-						JOptionPane.showMessageDialog(null,"Invalid DateTime Format dd/MM/yyyy HH:mm");
-						return;
-					}
+					if (exp.isBefore(LocalDateTime.now()))
+							{
+								JOptionPane.showMessageDialog(null, "Please choose an expiration date in the future.");
+								return;
+							}
+					
+//					if(Duration.length()<10){
+//						JOptionPane.showMessageDialog(null,"You need to input a Duration");
+//						return;
+//					}
+//					LocalDateTime completeDateTime;
+//					try {
+//						DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("MM/dd/yyyy HH:mm");
+//						completeDateTime = LocalDateTime.ofInstant(Duration.toInstant(), ZoneId.systemDefault());
+//					}
+//					catch (Exception e)
+//					{
+//						JOptionPane.showMessageDialog(null,"Invalid DateTime Format MM/dd/yyyy HH:mm");
+//						return;
+//					}
 					ListingSkeleton listing= new ListingSkeleton();
 					listing.auctionDescription = Description;
 					listing.auctionTile = Title;
 					listing.sellerUsername = usernameInput.getText();
-					listing.auctionCompletionDateTime = completeDateTime;
+					listing.auctionCompletionDateTime = exp;
 					if(stub.createListing(listing)) {
 						//TODO: Redirect to another tab
 
@@ -594,8 +627,8 @@ public class UserWindow extends JFrame {
 						JOptionPane.showMessageDialog(null, "Done!");
 
 					}
-
 				}
+				
 				catch (RemoteException e)
 				{
 					// Failed to invoke the server
@@ -614,6 +647,14 @@ public class UserWindow extends JFrame {
 				modListing.auctionTile = buyTitle.getText();
 				modListing.auctionDescription = buyDescription.getText();
 				modListing.listingId = activeAuctionId;
+				try{
+				modListing.proposedPrice = Long.parseLong(buyPendingBidPrice.getText());
+				modListing.buyerUsername = activeUser;
+				}
+				catch (Exception e)
+				{
+					// need a better way to handle
+				}
 			//	modListing.extendAuctionMinutes = [] // consider changing this to "proposedEndTime" 
 				
 //** DEBUG: Uncomment to Test modifying listing 1 on server
@@ -665,4 +706,26 @@ public class UserWindow extends JFrame {
 		buyTitle.setEditable(false);
 		buyDescription.setEditable(false);
 	}
+	
+    final class DateLabelFormatter extends JFormattedTextField.AbstractFormatter {
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+		private String datePattern = "MM/dd/yyyy";
+        private SimpleDateFormat dateFormatter = new SimpleDateFormat(datePattern);
+
+    @Override
+     public Object stringToValue(String text) throws ParseException {
+     return dateFormatter.parseObject(text);
+      }
+    @Override
+        public String valueToString(Object value) throws ParseException {
+            if (value != null) {
+                Calendar cal = (Calendar) value;
+                return dateFormatter.format(cal.getTime());
+            }
+            return "";
+        }
+    }
 }

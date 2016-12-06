@@ -1,11 +1,12 @@
 package dragonbids.structures.listings;
 
+import java.time.LocalDateTime;
 
 /**
  * Write a description of class Auction here.
  * 
- * @author (your name) 
- * @version (a version number or a date)
+ * @author Lew
+ * @version latest: 12-5-2016
  */
 public class Auction extends Listing
 {
@@ -15,9 +16,9 @@ public class Auction extends Listing
     
     /**
      */
-    public Auction(int listingUID, String creatorID, String title, String description)
+    public Auction(int listingUID, String creatorID, String title, String description, LocalDateTime expiration)
     {
-        super(listingUID, creatorID, title, description, new Object(), 0, 180);
+        super(listingUID, creatorID, title, description, new Object(), 0, expiration);
         this.bidHistory = new BidHistory();
         bidHistory.addBid(creatorID, currentPrice);
         //addObserver(new AuctionObserver());
@@ -25,7 +26,7 @@ public class Auction extends Listing
     
     public void addBid(String userid, long bid)
     {
-        long temp = currentPrice;
+        //long temp = currentPrice;
         bidHistory.addBid(userid, bid);
         this.currentPrice = bid;
         //setChanged();
