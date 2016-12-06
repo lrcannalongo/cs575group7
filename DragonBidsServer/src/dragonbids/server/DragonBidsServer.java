@@ -37,6 +37,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
     
     public DragonBidsServer()
     {
+    	lastAuctionUID = 0;
     	activeUsers = new Vector<User>();
     	activeListings = new HashMap<Integer, Listing>();
     	startupProcess();
@@ -110,7 +111,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		lastAuctionUID+=1;
 		//TODO Add duration to listing
 		Listing newListing = null;
-		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription);
+		newListing = listingFactory.getListing("AUCTION",lastAuctionUID,arg0.sellerUsername,arg0.auctionTile,arg0.auctionDescription, arg0.auctionCompletionDateTime);
 		if (null != newListing)
 		{
 			activeListings.put(lastAuctionUID, newListing);
@@ -157,9 +158,10 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		
 		if (listingToMod instanceof Auction)
 		{
-			AuctionHandler hndl = new AuctionHandler();
-			hndl.modify(listingToMod, arg0);
+			AuctionHandler hndl = new AuctionHandler();			
 			System.out.println("Modified Listing: " + listingToMod.getTitle());
+			System.out.println(hndl.modify(listingToMod, arg0));
+			writeListings();
 		}
 		
 		return false;
@@ -261,7 +263,7 @@ public class DragonBidsServer implements DragonBidsServer_I {
 		}
 		catch (Exception e)
 		{
-			System.out.println("ERROR");
+			System.out.println("No server files loaded.");
 		}
 		
 	}

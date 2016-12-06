@@ -29,12 +29,12 @@ public class Listing extends Observable implements Serializable {
 	// manipulate a Listing
 
 	public Listing(int listingUID, String creatorID, String title, String description, Object photo, int startingPrice,
-			int duration) {
+			LocalDateTime expiration) {
 		this.createDate = new Timestamp(new java.util.Date().getTime()).toLocalDateTime();
 		this.listingID = listingUID;
 		this.creatorID = creatorID;
 
-		setExpiration(createDate.plusMinutes(duration));
+		this.expirationDate = expiration;
 
 		setStartingPrice(startingPrice);
 		setTitle(title);
@@ -99,6 +99,11 @@ public class Listing extends Observable implements Serializable {
 	public final int getListingID()
 	{
 		return listingID;
+	}
+	
+	public final String getCreator()
+	{
+		return creatorID;
 	}
 
 	public final ListingSkeleton extractSkeleton() throws RemoteException {
