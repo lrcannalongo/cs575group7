@@ -23,6 +23,7 @@ public class Listing extends Observable implements Serializable {
 	LocalDateTime createDate;
 	LocalDateTime expirationDate;
 	String creatorID;
+	String buyerID;
 	//Object photo;
 
 	// using a variety of setProperty() methods allows a proxy to easily
@@ -111,6 +112,7 @@ public class Listing extends Observable implements Serializable {
 		skele.auctionDescription = this.description;
 		skele.auctionTile = this.title;
 		skele.sellerUsername = this.creatorID;
+		skele.buyerUsername = this.buyerID;
 		skele.listingId = this.listingID;
 		skele.currentPrice = this.currentPrice;
 		skele.auctionCompletionDateTime = this.expirationDate;
