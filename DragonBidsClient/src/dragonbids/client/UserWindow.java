@@ -156,7 +156,6 @@ public class UserWindow extends JFrame {
 			    			buyTitle.setText(thisListing.auctionTile);
 			    			buyDescription.setText(thisListing.auctionDescription);
 			    			buyCurrentPrice.setText(Long.toString(thisListing.currentPrice));
-<<<<<<< HEAD
 			    			
 			    			long nanosLeft = ChronoUnit.NANOS.between(LocalDateTime.now(), thisListing.auctionCompletionDateTime);
 			    			
@@ -172,12 +171,11 @@ public class UserWindow extends JFrame {
 				    			buyTimeLeft.setText(days + "d " + hours + "h " + minutes + "m");
 			    			}
 			    				
-=======
 			    			buySellerUname.setText(thisListing.sellerUsername);
 			    			buyBuyerUname.setText(thisListing.buyerUsername);
 			    			LocalDateTime timeRemaining = LocalDateTime.of(thisListing.auctionCompletionDateTime.toLocalDate(),thisListing.auctionCompletionDateTime.toLocalTime());
 			    			buyTimeLeft.setText(timeRemaining.toString());
->>>>>>> refs/remotes/carminevalentino/master
+
 			    			if(thisListing.sellerUsername.equals(activeUser))
 			    			{
 			    				activateSellerFeature();
