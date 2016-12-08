@@ -38,6 +38,7 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.math.BigDecimal;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyAdapter;
@@ -155,7 +156,7 @@ public class UserWindow extends JFrame {
 			    		{
 			    			buyTitle.setText(thisListing.auctionTile);
 			    			buyDescription.setText(thisListing.auctionDescription);
-			    			buyCurrentPrice.setText(Long.toString(thisListing.currentPrice));
+			    			buyCurrentPrice.setText("$" + thisListing.currentPrice.movePointLeft(2).toString());
 			    			
 			    			long nanosLeft = ChronoUnit.NANOS.between(LocalDateTime.now(), thisListing.auctionCompletionDateTime);
 			    			
@@ -496,11 +497,22 @@ public class UserWindow extends JFrame {
 					ListingSkeleton thisListing = stub.getListing(activeAuctionId);
 	    			buyTitle.setText(thisListing.auctionTile);
 	    			buyDescription.setText(thisListing.auctionDescription);
-	    			buyCurrentPrice.setText(Long.toString(thisListing.currentPrice));
+	    			buyCurrentPrice.setText("$" + thisListing.currentPrice);
 	    			buySellerUname.setText(thisListing.sellerUsername);
 	    			buyBuyerUname.setText(thisListing.buyerUsername);
-	    			LocalDateTime timeRemaining = LocalDateTime.of(thisListing.auctionCompletionDateTime.toLocalDate(),thisListing.auctionCompletionDateTime.toLocalTime());
-	    			buyTimeLeft.setText(timeRemaining.toString());
+	    			long nanosLeft = ChronoUnit.NANOS.between(LocalDateTime.now(), thisListing.auctionCompletionDateTime);
+	    			
+	    			if (nanosLeft < 0)
+	    			{
+	    				buyTimeLeft.setText("Auction Expired");
+	    			}
+	    			else
+	    			{
+		    			long days    = TimeUnit.NANOSECONDS.toDays(nanosLeft);
+		    			long hours   = TimeUnit.NANOSECONDS.toHours(nanosLeft) % 24;
+		    			long minutes = TimeUnit.NANOSECONDS.toMinutes(nanosLeft) % 60;
+		    			buyTimeLeft.setText(days + "d " + hours + "h " + minutes + "m");
+	    			}
 				} catch (RemoteException e1) {
 					// TODO Auto-generated catch block
 					e1.printStackTrace();
@@ -764,7 +776,8 @@ public class UserWindow extends JFrame {
 				modListing.auctionDescription = buyDescription.getText();
 				modListing.listingId = activeAuctionId;
 				try{
-				modListing.proposedPrice = Long.parseLong(buyPendingBidPrice.getText());
+				modListing.proposedPrice = new BigDecimal(buyPendingBidPrice.getText());
+				//modListing.proposedPrice = Long.parseLong(buyPendingBidPrice.getText());
 				modListing.buyerUsername = activeUser;
 				}
 				catch (Exception e)
